@@ -1,23 +1,26 @@
 package by.epam.jwdcomposite.composite;
 
-public class Symbol implements Component {
-    @Override
-    public void action() {
-        System.out.println("action in" +this.getClass().getSimpleName());
+public class Symbol implements TextComponent {
+
+    private TextComponentType type;
+    private char value;
+
+    public Symbol(TextComponentType type, char value) {
+        this.type = type;
+        this.value = value;
+    }
+
+    public char getValue() {
+        return value;
     }
 
     @Override
-    public boolean add(Component component) {
-        return false;
+    public TextComponentType getTextComponentType() {
+        return type;
     }
 
     @Override
-    public boolean remove(Component component) {
-        return false;
-    }
-
-    @Override
-    public Component get(int index) {
-        return null;
+    public String toString() {
+        return String.valueOf(value);
     }
 }
