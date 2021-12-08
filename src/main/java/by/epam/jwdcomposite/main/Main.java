@@ -1,9 +1,8 @@
 package by.epam.jwdcomposite.main;
 
-import by.epam.jwdcomposite.composite.TextComponent;
 import by.epam.jwdcomposite.composite.TextComposite;
-import by.epam.jwdcomposite.parser.TextParser;
-import by.epam.jwdcomposite.parser.impl.ParagraphParser;
+import by.epam.jwdcomposite.parser.MainParser;
+import by.epam.jwdcomposite.parser.impl.TextParser;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,7 +19,9 @@ public class Main {
                 "\tIt is a established fact that a reader will be of a page when looking at its layout…\r\n" +
                 "\tBye бандерлоги.\r\n";
 
-        TextParser parser=new ParagraphParser();
+        MainParser parser=new TextParser();
         TextComposite composite=parser.parse(text);
+        System.out.println("\n\n");
+        System.out.println(composite);
     }
 }

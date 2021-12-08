@@ -1,8 +1,10 @@
 package by.epam.jwdcomposite.composite;
 
+import by.epam.jwdcomposite.util.DelimiterGenerator;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
 
 public class TextComposite implements TextComponent {
 
@@ -10,7 +12,7 @@ public class TextComposite implements TextComponent {
     private TextComponentType type;
 
     public TextComposite(TextComponentType type) {
-        this.componentsList=new ArrayList<>();
+        this.componentsList = new ArrayList<>();
         this.type = type;
     }
 
@@ -33,11 +35,20 @@ public class TextComposite implements TextComponent {
 
     @Override
     public String toString() {
-        StringBuilder builder=new StringBuilder();
-        for (TextComponent component:componentsList) {
+        StringBuilder builder = new StringBuilder();
+        String prefix = DelimiterGenerator.componentPrefix(this);
+        String postfix;
+        builder.append(prefix);
+        for (TextComponent component : componentsList) {
+            prefix = DelimiterGenerator.componentPrefix(this, component);
+            builder.append(prefix);
             builder.append(component);
-            builder.append("type.getPrefix()");
+            postfix = DelimiterGenerator.componentPostfix(this, component);
+            builder.append(postfix);
         }
+        postfix = DelimiterGenerator.componentPostfix(this);
+        builder.append(postfix);
+
         return builder.toString();
     }
 

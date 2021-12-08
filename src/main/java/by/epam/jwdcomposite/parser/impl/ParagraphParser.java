@@ -3,25 +3,29 @@ package by.epam.jwdcomposite.parser.impl;
 import by.epam.jwdcomposite.composite.TextComponent;
 import by.epam.jwdcomposite.composite.TextComponentType;
 import by.epam.jwdcomposite.composite.TextComposite;
-import by.epam.jwdcomposite.entity.TextRegexContainer;
-import by.epam.jwdcomposite.parser.TextParser;
+import by.epam.jwdcomposite.util.TextRegexContainer;
+import by.epam.jwdcomposite.parser.MainParser;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class ParagraphParser implements TextParser {
+public class ParagraphParser implements MainParser {
 
-    private final TextParser nextParser;
+    private final MainParser sentenceParser;
 
     public ParagraphParser() {
-        this.nextParser = new SentenceParser();
+        this.sentenceParser = new SentenceParser();
     }
 
     @Override
-    public TextComposite parse(String sourceText) {
-        TextComposite composite = new TextComposite(TextComponentType.TEXT);
-        Arrays.stream((sourceText.split(TextRegexContainer.PARAGRAPH_DELIMITER_REGEX)))
-                .forEach(paragraph -> composite.add(nextParser.parse(paragraph)));
+    public TextComposite parse(String sourceParagraph) {
+        TextComposite composite = new TextComposite(TextComponentType.PARAGRAPH);
+        Pattern pattern = Pattern.compile(TextRegexContainer.SENTENCE_REGEX);
+        Matcher matcher = pattern.matcher(sourceParagraph);
+        while (matcher.find()) {
+            TextComponent sentence = sentenceParser.parse(matcher.group());
+            composite.add(sentence);
+        }
         return composite;
     }
 }

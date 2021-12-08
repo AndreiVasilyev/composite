@@ -8,5 +8,7 @@ public enum TextComponentType {
     WORD,
     EXPRESSION,
     LETTER,
-    SYMBOL
+    PUNCTUATION,
+    SYMBOL,
+    DIGIT
 }
