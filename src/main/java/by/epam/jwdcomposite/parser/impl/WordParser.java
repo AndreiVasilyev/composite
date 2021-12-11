@@ -1,18 +1,15 @@
 package by.epam.jwdcomposite.parser.impl;
 
-import by.epam.jwdcomposite.composite.Symbol;
-import by.epam.jwdcomposite.composite.TextComponent;
-import by.epam.jwdcomposite.composite.TextComponentType;
 import by.epam.jwdcomposite.composite.TextComposite;
-import by.epam.jwdcomposite.parser.MainParser;
+import by.epam.jwdcomposite.parser.BaseParser;
 
-import java.util.Arrays;
+import static by.epam.jwdcomposite.composite.TextComponentType.*;
 
-public class WordParser implements MainParser {
+public class WordParser implements BaseParser {
 
     @Override
     public TextComposite parse(String sourceWord) {
-        TextComposite composite = new TextComposite(TextComponentType.WORD);
+        TextComposite composite = new TextComposite(WORD);
         parseToComponents(sourceWord, composite);
         return composite;
     }

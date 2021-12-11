@@ -2,19 +2,25 @@ package by.epam.jwdcomposite.parser.impl;
 
 import by.epam.jwdcomposite.composite.Symbol;
 import by.epam.jwdcomposite.composite.TextComponent;
-import by.epam.jwdcomposite.composite.TextComponentType;
 import by.epam.jwdcomposite.composite.TextComposite;
-import by.epam.jwdcomposite.util.TextRegexContainer;
-import by.epam.jwdcomposite.parser.MainParser;
+import by.epam.jwdcomposite.exception.UnknownComponentException;
+import by.epam.jwdcomposite.parser.BaseParser;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LexemeParser implements MainParser {
+import static by.epam.jwdcomposite.composite.TextComponentType.*;
+import static by.epam.jwdcomposite.util.TextRegexContainer.*;
 
-    private MainParser wordParser;
-    private MainParser expressionParser;
-    private MainParser punctuationParser;
+public class LexemeParser implements BaseParser {
+
+    private static final Logger log = LogManager.getLogger();
+
+    private BaseParser wordParser;
+    private BaseParser expressionParser;
+    private BaseParser punctuationParser;
 
     public LexemeParser() {
         this.wordParser = new WordParser();
@@ -24,11 +30,11 @@ public class LexemeParser implements MainParser {
 
     @Override
     public TextComposite parse(String sourceLexeme) {
-        TextComposite composite = new TextComposite(TextComponentType.LEXEME);
+        TextComposite composite = new TextComposite(LEXEME);
         TextComponent component;
-        Pattern pattern = Pattern.compile(TextRegexContainer.PUNCTUATION_REGEX);
+        Pattern pattern = Pattern.compile(PUNCTUATION_REGEX);
         Matcher matcher = pattern.matcher(sourceLexeme);
-        if(matcher.find()) {
+        if (matcher.find()) {
             String beforePunctuation = matcher.group(1);
             String lexemeBody = matcher.group(2);
             String afterPunctuation = matcher.group(3);
@@ -36,19 +42,19 @@ public class LexemeParser implements MainParser {
                 if (beforePunctuation.length() > 1) {
                     component = punctuationParser.parse(beforePunctuation);
                 } else {
-                    component = new Symbol(TextComponentType.PUNCTUATION, beforePunctuation.charAt(0));
+                    component = new Symbol(PUNCTUATION, beforePunctuation.charAt(0));
                 }
                 composite.add(component);
             }
             if (!lexemeBody.isBlank()) {
-                if (lexemeBody.matches(TextRegexContainer.WORD_REGEX)) {
+                if (lexemeBody.matches(WORD_REGEX)) {
                     component = wordParser.parse(lexemeBody);
                     composite.add(component);
-                } else if (lexemeBody.matches(TextRegexContainer.EXPRESSION_REGEX)) {
+                } else if (lexemeBody.matches(EXPRESSION_REGEX)) {
                     component = expressionParser.parse(lexemeBody);
                     composite.add(component);
                 } else {
-                    Pattern separateLexemePattern = Pattern.compile(TextRegexContainer.SEPARATE_LEXEME_REGEX);
+                    Pattern separateLexemePattern = Pattern.compile(SEPARATE_LEXEME_REGEX);
                     Matcher separateLexemeMatcher = separateLexemePattern.matcher(lexemeBody);
                     while (separateLexemeMatcher.find()) {
                         String beforeWord = separateLexemeMatcher.group(1);
@@ -73,13 +79,14 @@ public class LexemeParser implements MainParser {
                 if (afterPunctuation.length() > 1) {
                     component = punctuationParser.parse(afterPunctuation);
                 } else {
-                    component = new Symbol(TextComponentType.PUNCTUATION, afterPunctuation.charAt(0));
+                    component = new Symbol(PUNCTUATION, afterPunctuation.charAt(0));
                 }
 
                 composite.add(component);
             }
-        } else{
-           //TODO  log("unknown lexeme: "+sourceLexeme);
+        } else {
+            log.error("unknown lexeme detected: {}", sourceLexeme);
+            throw new UnknownComponentException("unknown lexeme detected:" + sourceLexeme);
         }
         return composite;
     }

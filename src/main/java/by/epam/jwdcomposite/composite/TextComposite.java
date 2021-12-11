@@ -1,10 +1,9 @@
 package by.epam.jwdcomposite.composite;
 
-import by.epam.jwdcomposite.util.DelimiterGenerator;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import static by.epam.jwdcomposite.util.DelimiterDetector.*;
 
 public class TextComposite implements TextComponent {
 
@@ -16,6 +15,12 @@ public class TextComposite implements TextComponent {
         this.type = type;
     }
 
+    public TextComposite(TextComponentType type, List<TextComponent> components) {
+        this.componentsList = components;
+        this.type = type;
+    }
+
+    @Override
     public List<TextComponent> getComponentsList() {
         return componentsList;
     }
@@ -35,22 +40,20 @@ public class TextComposite implements TextComponent {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        String prefix = DelimiterGenerator.componentPrefix(this);
+        StringBuilder builder = new StringBuilder("");
+        String prefix = componentPrefix(this);
         String postfix;
         builder.append(prefix);
         for (TextComponent component : componentsList) {
-            prefix = DelimiterGenerator.componentPrefix(this, component);
+            prefix = componentPrefix(this, component);
             builder.append(prefix);
             builder.append(component);
-            postfix = DelimiterGenerator.componentPostfix(this, component);
+            postfix = componentPostfix(this, component);
             builder.append(postfix);
         }
-        postfix = DelimiterGenerator.componentPostfix(this);
+        postfix = componentPostfix(this);
         builder.append(postfix);
 
         return builder.toString();
     }
-
-    //TODO Comparator
 }

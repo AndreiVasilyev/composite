@@ -4,8 +4,9 @@ import by.epam.jwdcomposite.composite.Symbol;
 import by.epam.jwdcomposite.composite.TextComponent;
 import by.epam.jwdcomposite.composite.TextComponentType;
 import by.epam.jwdcomposite.composite.TextComposite;
+import by.epam.jwdcomposite.exception.UnknownComponentException;
 
-public interface MainParser {
+public interface BaseParser {
     TextComposite parse(String sourceText);
 
     default void parseToComponents(String sourceValue, TextComposite composite) {

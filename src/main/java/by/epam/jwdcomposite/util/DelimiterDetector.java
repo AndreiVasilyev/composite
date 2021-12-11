@@ -1,10 +1,11 @@
 package by.epam.jwdcomposite.util;
 
 import by.epam.jwdcomposite.composite.TextComponent;
-import by.epam.jwdcomposite.composite.TextComponentType;
 import by.epam.jwdcomposite.composite.TextComposite;
 
-public class DelimiterGenerator {
+import static by.epam.jwdcomposite.composite.TextComponentType.*;
+
+public class DelimiterDetector {
 
     private static final String SPACE = " ";
     private static final String TAB = "\t";
@@ -21,7 +22,7 @@ public class DelimiterGenerator {
 
     public static String componentPostfix(TextComponent composite) {
         return switch (composite.getTextComponentType()) {
-            case PARAGRAPH -> NEW_LINE;
+            case PARAGRAPH -> BACKSPACE.concat(NEW_LINE);
             case LEXEME -> SPACE;
             default -> EMPTY;
         };
@@ -32,8 +33,8 @@ public class DelimiterGenerator {
             case SENTENCE -> {
                 yield switch (component.getTextComponentType()) {
                     case LEXEME -> {
-                        TextComponent firstComponent = ((TextComposite) component).getComponentsList().get(0);
-                        if (TextComponentType.PUNCTUATION.equals(firstComponent.getTextComponentType())
+                        TextComponent firstComponent = (component.getComponentsList().get(0));
+                        if (PUNCTUATION.equals(firstComponent.getTextComponentType())
                                 && '.' == firstComponent.toString().charAt(0)) {
                             yield BACKSPACE;
                         }
