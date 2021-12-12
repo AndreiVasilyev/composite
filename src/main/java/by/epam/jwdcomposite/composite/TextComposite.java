@@ -39,6 +39,24 @@ public class TextComposite implements TextComponent {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TextComposite composite = (TextComposite) o;
+
+        if (!componentsList.equals(composite.componentsList)) return false;
+        return type == composite.type;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = componentsList.hashCode();
+        result = 31 * result + type.hashCode();
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         String prefix = componentPrefix(this);

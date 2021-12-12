@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
+
 public class Symbol implements TextComponent {
 
     private static final Logger log = LogManager.getLogger();
@@ -30,6 +31,24 @@ public class Symbol implements TextComponent {
     public List<TextComponent> getComponentsList() {
         log.warn("Unsupported operation in class {}", this.getClass());
         throw new UnsupportedOperationException("Unsupported operation in class" + this.getClass());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Symbol symbol = (Symbol) o;
+
+        if (value != symbol.value) return false;
+        return type == symbol.type;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type.hashCode();
+        result = 31 * result + value;
+        return result;
     }
 
     @Override
