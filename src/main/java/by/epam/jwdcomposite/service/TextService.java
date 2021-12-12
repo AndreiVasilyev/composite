@@ -11,7 +11,7 @@ public interface TextService {
 
     List<TextComponent> findSentencesWithLongestWord(TextComposite text);
 
-    List<TextComponent> removeSentencesByWordsQuantity(TextComposite text, int wordsQuantity);
+    TextComposite removeSentencesByWordsQuantity(TextComposite text, int wordsQuantity);
 
     Map<String, Integer> findQuantityOfSameWords(TextComposite text);
 

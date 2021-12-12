@@ -1,6 +1,7 @@
 package by.epam.jwdcomposite.service.impl;
 
 import by.epam.jwdcomposite.composite.TextComponent;
+import by.epam.jwdcomposite.composite.TextComponentType;
 import by.epam.jwdcomposite.composite.TextComposite;
 import by.epam.jwdcomposite.service.TextService;
 
@@ -31,20 +32,24 @@ public class TextServiceImpl implements TextService {
                         .stream())
                 .filter(sentence -> sentence.toString().contains(longestWord))
                 .toList();
-        System.out.println("longest word: " + longestWord);
         return result;
     }
 
     @Override
-    public List<TextComponent> removeSentencesByWordsQuantity(TextComposite text, int wordsQuantity) {
-        return text.getComponentsList()
+    public TextComposite removeSentencesByWordsQuantity(TextComposite text, int wordsQuantity) {
+        List<TextComponent> paragraphs = text.getComponentsList()
                 .stream()
-                .flatMap(paragraph -> paragraph.getComponentsList().stream())
-                .<TextComponent>mapMulti((sentence, consumer) -> {
-                    if (getWordsOfSentence((TextComposite) sentence).size() >= wordsQuantity) {
-                        consumer.accept(sentence);
-                    }
-                }).toList();
+                .map(paragraph -> {
+                    List<TextComponent> sentences = paragraph.getComponentsList()
+                            .stream()
+                            .filter(sentence -> getWordsOfSentence((TextComposite) sentence).size() >= wordsQuantity)
+                            .toList();
+                    TextComponent newParagraph = new TextComposite(PARAGRAPH, sentences);
+                    return newParagraph;
+                })
+                .toList();
+        TextComposite newText = new TextComposite(TEXT, paragraphs);
+        return newText;
     }
 
     @Override

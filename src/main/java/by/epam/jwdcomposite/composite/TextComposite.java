@@ -40,7 +40,7 @@ public class TextComposite implements TextComponent {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("");
+        StringBuilder builder = new StringBuilder();
         String prefix = componentPrefix(this);
         String postfix;
         builder.append(prefix);

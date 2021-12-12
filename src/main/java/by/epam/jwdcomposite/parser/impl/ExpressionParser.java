@@ -28,7 +28,6 @@ public class ExpressionParser implements BaseParser {
     public TextComposite parse(String sourceExpression) {
         TextComposite composite = new TextComposite(EXPRESSION);
         TextComponent component;
-        //sourceExpression=sourceExpression.replaceAll(" ","");
         if (sourceExpression.matches(BRACKETS_BLOCK_REGEX)) {
             char firstSymbol = sourceExpression.charAt(0);
             char lastSymbol = sourceExpression.charAt(sourceExpression.length() - 1);
